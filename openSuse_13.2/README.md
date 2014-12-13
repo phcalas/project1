@@ -1,6 +1,6 @@
-H1 OpenSuse 13.2 installation for Virtualisation (docker, QEMU, XEN, ...) 
+h1. OpenSuse 13.2 installation for Virtualisation (docker, QEMU, XEN, ...)
 
-H2 Intalltion from DVD
+h2. Installation from DVD
 
 * Chose language adn keyboard then Next
 
@@ -45,15 +45,21 @@ H2 Intalltion from DVD
 
 * Now go ito take a beer: It will take some time ;-)
 
-H2 Intallation normally done
+h2. Intallation normally done
 
 * Connect as root on system
 
 * Launch an XTerm into /root and excute following list of commands
+<pre>
   # git clone https://github.com/phcalas/project1.git
   # cd project1
-  # sh ./install_update.sh
-
-  
+  # sh ./install_update.shi
+</pre>
+* Restore backup (DO NOT USE THIS PROCEDURE: my reminder)
+<pre>
+  # mkdir /save; mount /dev/sdc2 /save
+  # (cd /save/root; tar cf - .) | (cd /root; tar xf -) 
+  # (cd /save; tar cf - .) | (cd /home; tar xf -)
+</pre>
   
 
