@@ -6,5 +6,3 @@ This project is to provide a simple reminder for installing some Linux distribut
 * OpenSuse 13.2
 * CentOS 7
 
-Make some changes derectly though the web
-
