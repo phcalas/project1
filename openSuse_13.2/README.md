@@ -49,11 +49,11 @@ h2. Intallation normally done
 
 * Connect as root on system
 
-* Launch an XTerm into /root and excute following list of commands
+* Launch an XTerm into /root and execute following list of commands
 <pre>
   # git clone https://github.com/phcalas/project1.git
-  # cd project1
-  # sh ./install_update.shi
+  # cd project1/opensuse_13.2
+  # sh ./install_update.sh
 </pre>
 * Restore backup (DO NOT USE THIS PROCEDURE: my reminder)
 <pre>
