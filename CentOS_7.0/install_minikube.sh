@@ -44,6 +44,9 @@ firewall-cmd --reload #Take into account this new configuration for Kubernetes
 firewall-cmd --get-services | grep kubernetes
 
 # Launch install of the minikube instance
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64   && chmod +x minikube
+mkdir -p /usr/local/bin
+install minikube /usr/local/bin && rm minikube
 systemctl enable kubelet.service
 minikube start --driver=kvm2
 
