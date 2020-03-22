@@ -53,17 +53,14 @@ firewall-cmd --get-services | grep minikube
 # Launch install of the minikube instance
 if [[ ! -x "/usr/local/bin/minikube" ]]; then
   curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64   && chmod +x minikube;
+  mkdir -p /usr/local/bin
+  install minikube /usr/local/bin && rm minikube
 fi
-mkdir -p /usr/local/bin
-install minikube /usr/local/bin && rm minikube
-systemctl enable kubelet.service
 
-cat << EOF > /etc/kubernetes/bootstrap-kubelet.conf
-apiVersion: kubelet.config.k8s.io/v1beta1
-kind: KubeletConfiguration
-clusterDNS:
-- 10.96.0.10
-EOF
+systemctl enable kubelet.service
+#find /var/lib/minikube -name kubectl | awk '{ print "ln -s " $1 "/usr/local/bin" }' | sh
+yum install -y kubectl
+
 mkdir -p .kube .minikube && minikube start --driver=none
 
 # Verification
