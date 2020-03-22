@@ -31,24 +31,26 @@ systemctl start docker
 # preferable to define a service
 # firewall-cmd --zone=public --permanent --add-port=8443/tcp
 # firewall-cmd --zone=public --permanent --add-port=10250/tcp
-cat > /etc/firewalld/services/kubernetes.xml << EOF
+cat > /etc/firewalld/services/minikube.xml << EOF
 <?xml version="1.0" encoding="utf-8"?>
 <service>
-  <short>Kubernetes minimun</short>
-  <description>This is just an example service.  It probably shouldn't be used on a real system.</description>
+  <short>Minikube minimun</short>
+  <description>Three ports for admin and kuberlet</description>
+  <port protocol="tcp" port="8080"/>
   <port protocol="tcp" port="8443"/>
   <port protocol="tcp" port="10250"/>
 </service>
 EOF
-firewall-cmd --reload #Take into account this new configuration for Kubernetes
-firewall-cmd --get-services | grep kubernetes
+firewall-cmd --reload #Take into account this new configuration for Kubernetes/minikube
+firewall-cmd --get-services | grep minikube
 
 # Launch install of the minikube instance
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64   && chmod +x minikube
+if [[ ! -x "/usr/local/bin/minikube" ]]; then curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64   && chmod +x minikube
 mkdir -p /usr/local/bin
 install minikube /usr/local/bin && rm minikube
 systemctl enable kubelet.service
-minikube start --driver=kvm2
+
+mkdir -p .kube .minikube && minikube start --driver=none
 
 # Verification
 diff /etc/kubernetes/kubelet.conf $HOME/.kube/config
@@ -59,6 +61,3 @@ kubectl get deployments
 kubectl expose deployment hello-node --type=LoadBalancer --port=8080
 kubectl get services
 minikube service hello-node # get the conf of exposed loadbalancer
-
-
-
