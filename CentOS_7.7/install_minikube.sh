@@ -1,10 +1,12 @@
 # Minikube installation on CentOS
 
 # prerequisite
+cd $HOME
 
 # Add repo: Docker, Kubernetes
-yum install -y yum-utils device-mapper-persistent-data lvm2
+yum install -y yum-utils device-mapper-persistent-data lvm2 overlay2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum-config-manager --enable docker-ce-stable
 
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -24,9 +26,10 @@ sed -i '/swap/s/^/#/' /etc/fstab
 yum install -y qemu-kvm qemu-guest-agent
 modprobe kvm # Verif with #lsmod | grep kvm
 modprobe virtio # Verifi with #lsmod | grep virtio
-yum install -y docker-ce docker-ce-client kubectl kubeadm kubelet containerd.io
-yum versionlock docker-ce docker-ce-client kubectl kubeadm kubelet
+yum install -y docker-ce docker-ce-cli containerd.io # kubectl kubeadm kubelet
+yum versionlock docker-ce docker-ce-cli # kubectl kubeadm kubelet
 systemctl start docker
+systemctl enable docker.service
 docker run hello-world # Little test for docker
 
 #Open port for Minikube
@@ -38,7 +41,7 @@ cat << EOF > /etc/firewalld/services/minikube.xml
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>Minikube minimun</short>
-  <description>Three ports for admin and kuberlet</description>
+  <description>Three ports for Kubernetes API server (8443) and 	Kubelet API (10250)</description>
   <port protocol="tcp" port="8080"/>
   <port protocol="tcp" port="8443"/>
   <port protocol="tcp" port="10250"/>
@@ -55,6 +58,12 @@ mkdir -p /usr/local/bin
 install minikube /usr/local/bin && rm minikube
 systemctl enable kubelet.service
 
+cat << EOF > /etc/kubernetes/bootstrap-kubelet.conf
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+clusterDNS:
+- 10.96.0.10
+EOF
 mkdir -p .kube .minikube && minikube start --driver=none
 
 # Verification
