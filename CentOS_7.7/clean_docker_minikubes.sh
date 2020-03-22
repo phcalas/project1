@@ -1,5 +1,5 @@
 # Stop minikbe & docker
-minikube stop
+minikube status && minikube stop
 systemctl stop docker
 systemctl disable docker
 systemctl disable kubernates
