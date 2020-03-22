@@ -24,7 +24,7 @@ sed -i '/swap/s/^/#/' /etc/fstab
 yum install -y qemu-kvm qemu-guest-agent
 modprobe kvm # Verif with #lsmod | grep kvm
 modprobe virtio # Verifi with #lsmod | grep virtio
-yum install -y docker-ce docker-ce-client kubectl kubeadm kubelet
+yum install -y docker-ce docker-ce-client kubectl kubeadm kubelet containerd
 yum versionlock docker-ce docker-ce-client kubectl kubeadm kubelet
 systemctl start docker
 #Open port for
