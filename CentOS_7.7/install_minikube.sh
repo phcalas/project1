@@ -27,11 +27,14 @@ modprobe virtio # Verifi with #lsmod | grep virtio
 yum install -y docker-ce docker-ce-client kubectl kubeadm kubelet containerd
 yum versionlock docker-ce docker-ce-client kubectl kubeadm kubelet
 systemctl start docker
-#Open port for
+docker run hello-world # Little test for docker
+
+#Open port for Minikube
 # preferable to define a service
+# firewall-cmd --zone=public --permanent --add-port=8080/tcp
 # firewall-cmd --zone=public --permanent --add-port=8443/tcp
 # firewall-cmd --zone=public --permanent --add-port=10250/tcp
-cat > /etc/firewalld/services/minikube.xml << EOF
+cat << EOF > /etc/firewalld/services/minikube.xml
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>Minikube minimun</short>
@@ -45,7 +48,9 @@ firewall-cmd --reload #Take into account this new configuration for Kubernetes/m
 firewall-cmd --get-services | grep minikube
 
 # Launch install of the minikube instance
-if [[ ! -x "/usr/local/bin/minikube" ]]; then curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64   && chmod +x minikube
+if [[ ! -x "/usr/local/bin/minikube" ]]; then
+  curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64   && chmod +x minikube;
+fi
 mkdir -p /usr/local/bin
 install minikube /usr/local/bin && rm minikube
 systemctl enable kubelet.service
