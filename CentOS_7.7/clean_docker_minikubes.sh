@@ -4,7 +4,7 @@ systemctl stop docker
 systemctl disable docker
 systemctl disable kubernates
 # Remove installation & images & sockets
-yum remove -y docker-ce docker-ce-client kubectl kubeadm kubelet containerd
+yum remove -y docker-ce docker-ce-client kubectl kubeadm kubelet containerd.io
 rm -rf /var/lib/docker* /var/run/docker* /etc/kubernetes
 # Remove repos
 rm -f /etc/yum.repos.d/kubernetes.repo /etc/yum.repos.d/docker-ce.repo
